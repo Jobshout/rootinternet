@@ -1,0 +1,160 @@
+<%  include include/main-header %>
+<% var locStr="ambala", mapStr="";
+%>
+
+</head>
+<body>
+ 	<!--header end-->
+	<% include include/header %>
+	<!--header end-->
+ 	
+	<div class="breadcrumbs">
+		<div class="container">
+        	<div class="row">
+          		<div class="col-lg-4 col-sm-4">
+           			<h1 class="mainheading"><span>Contact Us</span></h1>
+          		</div>
+          		<div class="col-lg-8 col-sm-8">
+            		<ol class="breadcrumb pull-right">
+              			<li><a href="/">Home</a></li>
+              			<li class="active">Contact Us</li>
+    				</ol>
+        		</div>
+        	</div>
+		</div>
+	</div>
+	
+	<div class="container content">
+		<div CLASS="row">
+			<div class="col-lg-9 col-sm-9 address">
+          		 <h4>
+            Drop us a line so that we can hear from you
+          </h4>
+          <% if (typeof queryStr !== 'undefined' && queryStr !== null) {
+    								if(queryStr.msg=="error") {	%>
+									<div class="alert alert-danger alert-dismissable">
+             							<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                						Oops! Please try after some time, we are having some technical issue. 
+                					</div>
+            						<% }
+           							if(queryStr.msg=="success") {	%>
+										<div class="alert alert-success alert-dismissable">
+             								<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                							Thank you. Your message has been sent successfully!
+            							</div>
+            						<%	}
+            					}	%>
+          <div class="contact-form">
+            <form id="ajax-contact-form" role="form" method="post" action="/contact/save">
+            	<input name="location" type="hidden" value="<%= locStr %>">
+              <div class="form-group">
+                <label for="name">
+                  Name
+                </label>
+                <input placeholder="" name="name" id="name" class="form-control" type="text">
+              </div>
+              <div class="form-group">
+                <label for="email">
+                  Email
+                </label>
+                <input placeholder="" name="email" id="email" class="form-control" type="text">
+              </div>
+              <div class="form-group">
+                <label for="phone">
+                  Phone
+                </label>
+                <input id="phone" name="phone" class="form-control" type="text">
+              </div>
+			  
+			  
+			  <div class="form-group">
+                <label for="phone">
+                  Subject
+                </label>
+                <input id="subject" name="subject" class="form-control" type="text">
+              </div>
+              <div class="form-group">
+                <label for="phone">
+                  Message
+                </label>
+                <textarea placeholder="" id="message" name="message" rows="10" class="form-control"></textarea>
+              </div>
+              <button class="btn btn-primary" type="submit">
+                Submit
+              </button>
+            </form>
+
+          </div>
+        </div>
+	<div CLASS="col-md-3 address">
+		<% if (typeof address_token.token_content !== 'undefined' && address_token.token_content !== null && address_token.token_content!='') {
+          		var addrDetails = JSON.parse(address_token.token_content);  
+          		if (typeof addrDetails.map !== 'undefined' && addrDetails.map !== null) {
+          			mapStr=addrDetails.map;
+          		}	%>
+			<h4>Contact Detail</h4>
+			<div class="sidebox ">
+                <p></p><address>
+                        <% if (typeof addrDetails.address !== 'undefined' && addrDetails.address !== null) {	%>
+                        	<%= addrDetails.address	%>
+                        <% } %>
+                        <% if (typeof addrDetails.phone_number !== 'undefined' && addrDetails.phone_number !== null) { %>
+                        	<abbr title="Phone">P:</abbr> <%= addrDetails.phone_number	%></address> <br>
+                         <% } %>
+                       	<% if (typeof addrDetails.email_address !== 'undefined' && addrDetails.email_address !== null) { %>
+                       	<strong>Email</strong><br>
+                        <a href="mailto:<%= addrDetails.email_address	%>"><%= addrDetails.email_address	%></a>
+                         <% } %>  
+                    </address><p></p>     
+                  
+                    					
+                    </div>
+		<% } %>
+	</div>
+	
+	</div>
+	  
+	
+      </div>
+	 
+<% if (typeof mapStr !== 'undefined' && mapStr !== null && mapStr !== "") {	%>
+	<div style="position: relative; top: 34px;">
+	<iframe src="<%= mapStr %>" scrolling="no" marginheight="0" marginwidth="0" frameborder="0" height="300" width="100%"></iframe>
+	</div>
+<%	}	%>
+
+   	<!--footer start-->
+    <% include include/footer %>
+    <!--footer end-->
+    <script src="js/jquery.validate.js"></script>
+    <script type="text/javascript">
+$(document).ready(function(){
+	$("#ajax-contact-form").validate({
+		rules: {
+			name: "required",
+			email: {
+				required: true,
+				email: true
+			},
+			subject: "required",
+			message: "required",
+			captcha_code: "required",
+			
+		},
+		messages: {
+			name: "Please enter your name",
+			email: {
+				required: "Please enter your E-mail",
+				email: "Please enter valid E-mail"
+			},
+			subject: "Please enter Subject",
+			message: "Please enter Message",
+			captcha_code: "Please enter Security Code",
+		}
+	});
+
+});
+
+</script>
+  </body>
+</html>
